@@ -129,6 +129,30 @@ AWS certificates and private keys are not included in this repository. They are 
 
 ---
 
+## Docker Support
+
+The FastAPI backend can also be run inside a Docker container.
+
+### Build Docker image
+
+```bash
+docker build -t iot-fastapi-backend .
+```
+
+### Run Docker container
+
+```bash
+docker run -p 8000:8000 iot-fastapi-backend
+```
+
+Open:
+
+```text
+http://127.0.0.1:8000/
+```
+
+The dashboard and API will run from inside the containerized environment.
+
 ## Current Status
 
 The project currently includes MQTT telemetry publishing, FastAPI REST API integration, and a live browser dashboard.
