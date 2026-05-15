@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from datetime import datetime
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
@@ -30,3 +31,33 @@ def receive_sensor_data(data: SensorData):
 @app.get("/sensor-data")
 def get_sensor_data():
     return latest_data
+
+@app.get("/", response_class=HTMLResponse)
+def dashboard():
+    return """
+    <html>
+    <head>
+        <title>IoT Telemetry Dashboard</title>
+    </head>
+    <body>
+        <h1>IoT Telemetry Dashboard</h1>
+        <p>Temperature: <span id="temperature">--</span> °C</p>
+        <p id="timestamp">Waiting for data...</p>
+
+        <script>
+            async function fetchData() {
+                const response = await fetch('/sensor-data');
+                const data = await response.json();
+
+                if (data.temperature !== null) {
+                    document.getElementById('temperature').innerText = data.temperature;
+                    document.getElementById('timestamp').innerText = 'Last update: ' + data.timestamp;
+                }
+            }
+
+            setInterval(fetchData, 1000);
+            fetchData();
+        </script>
+    </body>
+    </html>
+    """
