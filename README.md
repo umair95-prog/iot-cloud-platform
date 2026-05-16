@@ -214,6 +214,34 @@ Username: admin
 Password: admin
 ```
 
+
+---
+
+## Project Screenshots
+
+### Grafana Monitoring Dashboard
+
+![Grafana Dashboard](screenshots/grafana-dashboard.png)
+
+---
+
+### FastAPI Live Telemetry Dashboard
+
+![FastAPI Dashboard](screenshots/fastapi-dashboard.png)
+
+---
+
+### Prometheus Metrics Monitoring
+
+![Prometheus Metrics](screenshots/prometheus-metrics.png)
+
+---
+
+### Docker Containerized Services
+
+![Docker Containers](screenshots/docker-containers.png)
+
+
 ## Current Status
 
 The platform currently includes:
