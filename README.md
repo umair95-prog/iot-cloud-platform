@@ -153,13 +153,83 @@ http://127.0.0.1:8000/
 
 The dashboard and API will run from inside the containerized environment.
 
+
+---
+
+## Monitoring Stack
+
+The platform includes a containerized monitoring and observability stack using Prometheus and Grafana.
+
+### Monitoring Architecture
+
+```text
+IoT Device Simulation
+        ↓
+FastAPI Backend
+        ↓
+Prometheus Metrics Endpoint (/metrics)
+        ↓
+Prometheus Scraping
+        ↓
+Grafana Dashboard Visualization
+```
+
+### Monitoring Components
+
+- Prometheus used for telemetry metric collection and scraping
+- Grafana used for real-time dashboard visualization
+- Custom temperature metrics exported from FastAPI using Prometheus client library
+- Docker Compose used for multi-service orchestration
+
+### Running the Monitoring Stack
+
+```bash
+docker compose up --build
+```
+
+### Access Services
+
+FastAPI Dashboard:
+
+```text
+http://127.0.0.1:8000/
+```
+
+Prometheus:
+
+```text
+http://127.0.0.1:9090/
+```
+
+Grafana:
+
+```text
+http://127.0.0.1:3000/
+```
+
+Default Grafana credentials:
+
+```text
+Username: admin
+Password: admin
+```
+
 ## Current Status
 
-The project currently includes MQTT telemetry publishing, FastAPI REST API integration, and a live browser dashboard.
+The platform currently includes:
 
-Future extensions include:
+- Real-time MQTT telemetry publishing using AWS IoT Core
+- FastAPI-based REST API backend for telemetry ingestion
+- Live browser dashboard for telemetry visualization
+- Dockerized backend deployment workflows
+- Prometheus-based metrics scraping and monitoring
+- Grafana dashboard integration for real-time observability
+- Docker Compose orchestration for multi-service deployment
+- Git-based version control and feature branch workflow
 
-- Docker containerization
-- Grafana dashboard integration
-- Kubernetes deployment workflows
-- Cloud-native monitoring improvements
+Planned future extensions include:
+
+- Kubernetes-based container orchestration
+- Advanced Grafana dashboards and alerting
+- Persistent telemetry storage and historical analytics
+- Cloud-native deployment and scaling workflows
