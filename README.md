@@ -12,25 +12,26 @@ The system simulates sensor telemetry data and publishes it through MQTT to AWS 
 
 ---
 
-## Architecture
 
-```text
-Simulated IoT Device
-        |
-        | MQTT
-        v
-AWS IoT Core
-        |
-        | Python telemetry flow
-        v
-FastAPI REST Backend
-        |
-        | HTTP GET /sensor-data
-        v
-Live Web Dashboard
+
+## System Architecture
+
+```mermaid
+flowchart TD
+    A[Simulated IoT Device<br>Python MQTT Publisher] -->|MQTT Telemetry| B[AWS IoT Core]
+
+    A -->|HTTP POST /sensor-data| C[FastAPI REST Backend]
+
+    C -->|Expose latest telemetry| D[Live Web Dashboard]
+
+    C -->|Expose /metrics endpoint| E[Prometheus]
+
+    E -->|Scraped telemetry metrics| F[Grafana Dashboard]
+
+    G[Docker Compose] --> C
+    G --> E
+    G --> F
 ```
-
----
 
 ## Features
 
