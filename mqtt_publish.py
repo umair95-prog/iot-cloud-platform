@@ -26,7 +26,12 @@ client_id = "my-iot-device"
 topic = "sensor/data"
 
 # =========================
-# 4. Create MQTT connection
+# 4. Runtime configuration
+# =========================
+ENABLE_LOCAL_API = False
+
+# =========================
+# 5. Create MQTT connection
 # =========================
 mqtt_connection = mqtt_connection_builder.mtls_from_path(
     endpoint=endpoint,
@@ -47,7 +52,7 @@ connect_future.result()
 print("Connected successfully!")
 
 # =========================
-# 5. Publish loop (simulated sensor)
+# 6. Publish loop (simulated sensor)
 # =========================
 while True:
     data = {
@@ -65,11 +70,12 @@ while True:
 
     print("Published MQTT:", message)
 
-    response = requests.post(
-        "http://127.0.0.1:8000/sensor-data",
-        json={"temperature": data["temperature"]}
-    )
+    if ENABLE_LOCAL_API:
+        response = requests.post(
+            "http://127.0.0.1:8000/sensor-data",
+            json={"temperature": data["temperature"]}
+        )
 
-    print("Sent to FastAPI:", response.status_code, response.json())
+        print("Sent to FastAPI:", response.status_code, response.json())
 
     time.sleep(3)
