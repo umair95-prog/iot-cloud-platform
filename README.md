@@ -36,6 +36,54 @@ flowchart TD
     I[Kubernetes Service<br>NodePort 30080] --> H
 ```
 
+## AWS-Native Serverless Pipeline
+
+The project also includes an AWS-native telemetry flow using AWS IoT Core, IoT Rules, Lambda, and Amazon S3.
+
+### AWS Serverless Architecture
+
+```mermaid
+flowchart TD
+    A[Simulated IoT Device<br>Python MQTT Publisher]
+        -->|MQTT Telemetry| B[AWS IoT Core]
+
+    B -->|IoT Rule<br>SELECT * FROM 'sensor/data'| C[AWS Lambda]
+
+    C -->|Store JSON telemetry| D[Amazon S3<br>iot-data/]
+```
+
+### Components
+
+- **AWS IoT Core** receives MQTT telemetry from the simulated device
+- **IoT Rule Engine** routes messages from the `sensor/data` topic
+- **AWS Lambda** processes incoming telemetry events
+- **Amazon S3** stores telemetry payloads as JSON files under `iot-data/`
+- The MQTT publisher supports AWS-only mode using `ENABLE_LOCAL_API = False`
+
+### Runtime Modes
+
+The MQTT publisher can run in two modes:
+
+```python
+ENABLE_LOCAL_API = False
+```
+
+AWS-native mode:
+
+```text
+MQTT Publisher → AWS IoT Core → IoT Rule → Lambda → S3
+```
+
+```python
+ENABLE_LOCAL_API = True
+```
+
+Hybrid local monitoring mode:
+
+```text
+MQTT Publisher → AWS IoT Core + Local FastAPI Dashboard
+```
+
 ## Features
 
 - Real-time sensor telemetry simulation
