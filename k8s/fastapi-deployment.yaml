@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi-iot-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi-iot-backend
+  template:
+    metadata:
+      labels:
+        app: fastapi-iot-backend
+    spec:
+      containers:
+        - name: fastapi-iot-backend
+          image: iot-fastapi-backend:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
