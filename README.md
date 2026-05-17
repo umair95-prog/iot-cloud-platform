@@ -31,6 +31,9 @@ flowchart TD
     G[Docker Compose] --> C
     G --> E
     G --> F
+
+    H[Kubernetes Deployment] --> C
+    I[Kubernetes Service<br>NodePort 30080] --> H
 ```
 
 ## Features
@@ -157,6 +160,45 @@ The dashboard and API will run from inside the containerized environment.
 
 ---
 
+## Kubernetes Deployment
+
+The FastAPI backend can also be deployed locally using Kubernetes through Docker Desktop.
+
+### Apply Kubernetes configuration
+
+```bash
+kubectl apply -f k8s/
+```
+
+### Check running pods
+
+```bash
+kubectl get pods
+```
+
+### Check service
+
+```bash
+kubectl get services
+```
+
+### Access the application
+
+```text
+http://localhost:30080/
+```
+
+### Stop Kubernetes deployment
+
+```bash
+kubectl delete -f k8s/
+```
+
+This deployment uses a Kubernetes `Deployment` to run the FastAPI container and a `NodePort` service to expose it locally.
+
+
+
+
 ## Monitoring Stack
 
 The platform includes a containerized monitoring and observability stack using Prometheus and Grafana.
@@ -242,6 +284,12 @@ Password: admin
 
 ![Docker Containers](screenshots/docker-containers.png)
 
+
+---
+
+### Kubernetes Deployment
+
+![Kubernetes Deployment](screenshots/kubernetes-deployment.png)
 
 ## Current Status
 
