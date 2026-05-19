@@ -18,22 +18,28 @@ The system simulates sensor telemetry data and publishes it through MQTT to AWS 
 
 ```mermaid
 flowchart TD
-    A[Simulated IoT Device<br>Python MQTT Publisher] -->|MQTT Telemetry| B[AWS IoT Core]
+    A[Simulated IoT Device<br>Python MQTT Publisher]
 
-    A -->|HTTP POST /sensor-data| C[FastAPI REST Backend]
+    A -->|MQTT Telemetry| B[AWS IoT Core]
+    B -->|IoT Rule<br>SELECT * FROM sensor/data| C[AWS Lambda]
+    C -->|Store JSON telemetry| D[Amazon S3<br>iot-data/]
 
-    C -->|Expose latest telemetry| D[Live Web Dashboard]
+    A -->|HTTP POST /sensor-data<br>Local monitoring mode| E[FastAPI REST Backend]
 
-    C -->|Expose /metrics endpoint| E[Prometheus]
+    E -->|Store telemetry records| F[PostgreSQL Database]
+    E -->|Expose latest telemetry<br>/sensor-data| G[Live Web Dashboard]
+    E -->|Expose history<br>/sensor-history| G
 
-    E -->|Scraped telemetry metrics| F[Grafana Dashboard]
+    E -->|Expose metrics<br>/metrics| H[Prometheus]
+    H -->|Scraped telemetry metrics| I[Grafana Dashboard]
 
-    G[Docker Compose] --> C
-    G --> E
-    G --> F
+    J[Docker Compose] --> E
+    J --> F
+    J --> H
+    J --> I
 
-    H[Kubernetes Deployment] --> C
-    I[Kubernetes Service<br>NodePort 30080] --> H
+    K[Kubernetes Deployment] --> E
+    L[Kubernetes Service<br>NodePort 30080] --> K
 ```
 
 ## AWS-Native Serverless Pipeline
@@ -245,6 +251,62 @@ kubectl delete -f k8s/
 This deployment uses a Kubernetes `Deployment` to run the FastAPI container and a `NodePort` service to expose it locally.
 
 
+
+---
+
+## PostgreSQL Telemetry Persistence
+
+The platform now stores telemetry data persistently using PostgreSQL.
+
+### Database Flow
+
+```text
+MQTT Publisher
+    ↓
+FastAPI Backend
+    ↓
+PostgreSQL Database
+    ↓
+REST API History Endpoint
+```
+
+### Features
+
+- Persistent telemetry storage
+- Historical sensor records
+- SQL-based querying
+- REST API access to stored history
+- Live dashboard + historical database integration
+
+### PostgreSQL Table Schema
+
+```sql
+CREATE TABLE sensor_data (
+    id SERIAL PRIMARY KEY,
+    temperature DOUBLE PRECISION,
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### REST API Endpoints
+
+Latest telemetry:
+
+```text
+GET /sensor-data
+```
+
+Historical telemetry:
+
+```text
+GET /sensor-history
+```
+
+Prometheus metrics:
+
+```text
+GET /metrics
+```
 
 
 ## Monitoring Stack

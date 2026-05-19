@@ -28,7 +28,7 @@ topic = "sensor/data"
 # =========================
 # 4. Runtime configuration
 # =========================
-ENABLE_LOCAL_API = False
+ENABLE_LOCAL_API = True
 
 # =========================
 # 5. Create MQTT connection

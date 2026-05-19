@@ -22,5 +22,18 @@ services:
       - grafana-storage:/var/lib/grafana
 
 
+  postgres:
+    image: postgres:16
+    container_name: iot-postgres
+    environment:
+      POSTGRES_DB: iotdb
+      POSTGRES_USER: iotuser
+      POSTGRES_PASSWORD: iotpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
+
 volumes:
   grafana-storage:
+  postgres-storage:
