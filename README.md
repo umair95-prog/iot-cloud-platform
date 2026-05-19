@@ -308,6 +308,13 @@ Prometheus metrics:
 GET /metrics
 ```
 
+### PostgreSQL Dashboard & SQL Queries
+
+#### Dashboard with Historical Data
+
+![PostgreSQL Dashboard](./screenshots/postgres-dashboard-history.png)
+
+
 
 ## Monitoring Stack
 
