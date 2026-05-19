@@ -17,29 +17,52 @@ The system simulates sensor telemetry data and publishes it through MQTT to AWS 
 ## System Architecture
 
 ```mermaid
-flowchart TD
-    A[Simulated IoT Device<br>Python MQTT Publisher]
+flowchart LR
 
-    A -->|MQTT Telemetry| B[AWS IoT Core]
-    B -->|IoT Rule<br>SELECT * FROM sensor/data| C[AWS Lambda]
-    C -->|Store JSON telemetry| D[Amazon S3<br>iot-data/]
+    subgraph Device Layer
+        A[Simulated IoT Device<br>Python MQTT Publisher]
+    end
 
-    A -->|HTTP POST /sensor-data<br>Local monitoring mode| E[FastAPI REST Backend]
+    subgraph AWS Cloud Pipeline
+        B[AWS IoT Core]
+        C[AWS Lambda]
+        D[Amazon S3<br>iot-data/]
+    end
 
-    E -->|Store telemetry records| F[PostgreSQL Database]
-    E -->|Expose latest telemetry<br>/sensor-data| G[Live Web Dashboard]
-    E -->|Expose history<br>/sensor-history| G
+    subgraph Local Platform Stack
+        E[FastAPI REST Backend]
+        F[PostgreSQL Database]
+        G[Live Web Dashboard]
+        H[Prometheus]
+        I[Grafana Dashboard]
+    end
 
-    E -->|Expose metrics<br>/metrics| H[Prometheus]
-    H -->|Scraped telemetry metrics| I[Grafana Dashboard]
+    subgraph Container & Orchestration
+        J[Docker Compose]
+        K[Kubernetes Deployment]
+        L[Kubernetes Service<br>NodePort 30080]
+    end
 
-    J[Docker Compose] --> E
+    A -->|MQTT Telemetry| B
+    B -->|IoT Rule| C
+    C -->|Store JSON| D
+
+    A -->|HTTP POST /sensor-data| E
+
+    E -->|Store telemetry| F
+    E -->|Expose latest data| G
+    E -->|Expose history| G
+
+    E -->|/metrics| H
+    H -->|Visualization| I
+
+    J --> E
     J --> F
     J --> H
     J --> I
 
-    K[Kubernetes Deployment] --> E
-    L[Kubernetes Service<br>NodePort 30080] --> K
+    K --> E
+    L --> K
 ```
 
 ## AWS-Native Serverless Pipeline
