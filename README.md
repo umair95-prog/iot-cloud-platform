@@ -1,14 +1,23 @@
 # IoT Cloud Platform
 
-A real-time IoT telemetry and monitoring platform built with Python, AWS IoT Core, MQTT, FastAPI, and a live web dashboard.
+A cloud-native IoT telemetry, monitoring, and observability platform built using Python, AWS IoT Core, FastAPI, PostgreSQL, Docker, Kubernetes, Prometheus, and Grafana.
 
-This project demonstrates an end-to-end data flow from a simulated IoT device to cloud ingestion, backend API communication, and real-time visualization.
+The project demonstrates an end-to-end telemetry pipeline combining cloud-native backend development, real-time monitoring, containerized deployment workflows, serverless AWS services, and persistent telemetry storage.
 
 ---
 
 ## Project Overview
 
-The system simulates sensor telemetry data and publishes it through MQTT to AWS IoT Core. The same telemetry is forwarded to a FastAPI backend through REST endpoints, where the latest sensor values are exposed to a live dashboard.
+The platform simulates IoT sensor telemetry data and publishes it through MQTT to AWS IoT Core. The telemetry is processed through multiple backend and cloud-native workflows:
+
+- AWS IoT Core → Lambda → Amazon S3 serverless telemetry pipeline
+- FastAPI REST backend for telemetry ingestion and API exposure
+- PostgreSQL database persistence for historical telemetry storage
+- Prometheus metrics scraping and Grafana observability dashboards
+- Docker Compose multi-service orchestration
+- Kubernetes-based local container orchestration and deployment
+
+The system supports both real-time telemetry visualization and persistent historical telemetry analysis through REST APIs and monitoring dashboards.
 
 ---
 
@@ -127,13 +136,34 @@ MQTT Publisher → AWS IoT Core + Local FastAPI Dashboard
 
 ## Technologies Used
 
-- Python
+### Cloud & Infrastructure
 - AWS IoT Core
-- MQTT
+- AWS Lambda
+- Amazon S3
+- Docker
+- Docker Compose
+- Kubernetes
+
+### Backend & APIs
+- Python
 - FastAPI
 - REST API
+- MQTT
 - JSON
-- HTML / JavaScript
+
+### Database & Persistence
+- PostgreSQL
+- SQL
+
+### Monitoring & Observability
+- Prometheus
+- Grafana
+
+### Frontend & Visualization
+- HTML
+- JavaScript
+
+### Development Workflow
 - Git
 - Linux / CLI workflow
 
