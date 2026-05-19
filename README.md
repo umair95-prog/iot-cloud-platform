@@ -466,17 +466,24 @@ Password: admin
 The platform currently includes:
 
 - Real-time MQTT telemetry publishing using AWS IoT Core
-- FastAPI-based REST API backend for telemetry ingestion
-- Live browser dashboard for telemetry visualization
-- Dockerized backend deployment workflows
-- Prometheus-based metrics scraping and monitoring
-- Grafana dashboard integration for real-time observability
-- Docker Compose orchestration for multi-service deployment
-- Git-based version control and feature branch workflow
+- AWS IoT Rule Engine integration
+- AWS Lambda serverless telemetry processing
+- Amazon S3 telemetry storage pipeline
+- FastAPI-based REST API backend
+- Live browser telemetry dashboard
+- PostgreSQL-based telemetry persistence and historical storage
+- REST API history endpoints for telemetry retrieval
+- Prometheus metrics scraping and observability integration
+- Grafana dashboard visualization
+- Dockerized multi-service deployment workflows
+- Docker Compose orchestration
+- Kubernetes-based local deployment workflows
+- Git-based version control and feature branch development workflow
 
 Planned future extensions include:
 
-- Kubernetes-based container orchestration
-- Advanced Grafana dashboards and alerting
-- Persistent telemetry storage and historical analytics
-- Cloud-native deployment and scaling workflows
+- CI/CD pipelines using GitHub Actions
+- Public cloud deployment workflows
+- Infrastructure as Code using Terraform
+- Advanced Kubernetes orchestration and scaling
+- Extended observability and alerting workflows
