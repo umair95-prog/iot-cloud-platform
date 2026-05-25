@@ -1,23 +1,25 @@
 # IoT Cloud Platform
 
-A cloud-native IoT telemetry, monitoring, and observability platform built using Python, AWS IoT Core, FastAPI, PostgreSQL, Docker, Kubernetes, Prometheus, and Grafana.
+A cloud-native IoT telemetry, monitoring, and observability platform built using AWS IoT Core, FastAPI, PostgreSQL, Docker, Prometheus, Grafana, and AWS EC2.
 
-The project demonstrates an end-to-end telemetry pipeline combining cloud-native backend development, real-time monitoring, containerized deployment workflows, serverless AWS services, and persistent telemetry storage.
+The platform simulates IoT sensor telemetry, processes data through MQTT and REST-based cloud services, stores telemetry persistently in PostgreSQL, and provides real-time monitoring and observability dashboards through Grafana and Prometheus.
+
+The complete stack is containerized using Docker Compose and deployed on a cloud-hosted Linux server running on Amazon EC2.
 
 ---
 
 ## Project Overview
 
-The platform simulates IoT sensor telemetry data and publishes it through MQTT to AWS IoT Core. The telemetry is processed through multiple backend and cloud-native workflows:
+The system simulates telemetry data from an IoT device and publishes it through MQTT to AWS IoT Core. Telemetry data is forwarded to a FastAPI backend through REST APIs, where it is processed, exposed through monitoring endpoints, and stored persistently in PostgreSQL.
 
-- AWS IoT Core → Lambda → Amazon S3 serverless telemetry pipeline
-- FastAPI REST backend for telemetry ingestion and API exposure
-- PostgreSQL database persistence for historical telemetry storage
-- Prometheus metrics scraping and Grafana observability dashboards
-- Docker Compose multi-service orchestration
-- Kubernetes-based local container orchestration and deployment
+The platform includes:
 
-The system supports both real-time telemetry visualization and persistent historical telemetry analysis through REST APIs and monitoring dashboards.
+- Real-time telemetry ingestion using MQTT
+- Cloud-hosted backend services on AWS EC2
+- Persistent telemetry storage using PostgreSQL
+- Observability and monitoring using Prometheus and Grafana
+- Containerized multi-service deployment using Docker Compose
+- CI workflow automation using GitHub Actions
 
 ---
 
@@ -32,13 +34,13 @@ flowchart LR
         A[Simulated IoT Device<br>Python MQTT Publisher]
     end
 
-    subgraph AWS Cloud Pipeline
+    subgraph AWS Cloud Services
         B[AWS IoT Core]
         C[AWS Lambda]
         D[Amazon S3<br>iot-data/]
     end
 
-    subgraph Local Platform Stack
+    subgraph Cloud Deployment on AWS EC2
         E[FastAPI REST Backend]
         F[PostgreSQL Database]
         G[Live Web Dashboard]
@@ -60,10 +62,10 @@ flowchart LR
 
     E -->|Store telemetry| F
     E -->|Expose latest data| G
-    E -->|Expose history| G
+    E -->|Expose telemetry history| G
 
-    E -->|/metrics| H
-    H -->|Visualization| I
+    E -->|/metrics endpoint| H
+    H -->|Visualization & Monitoring| I
 
     J --> E
     J --> F
@@ -140,6 +142,7 @@ MQTT Publisher → AWS IoT Core + Local FastAPI Dashboard
 - AWS IoT Core
 - AWS Lambda
 - Amazon S3
+- Amazon EC2
 - Docker
 - Docker Compose
 - Kubernetes
@@ -163,9 +166,15 @@ MQTT Publisher → AWS IoT Core + Local FastAPI Dashboard
 - HTML
 - JavaScript
 
+### DevOps & Automation
+- GitHub Actions CI
+- YAML
+
 ### Development Workflow
 - Git
 - Linux / CLI workflow
+- Cloud deployment on AWS EC2
+- Dockerized multi-service deployment
 
 ---
 
@@ -367,7 +376,38 @@ GET /metrics
 
 ![PostgreSQL Dashboard](./screenshots/postgres-dashboard-history.png)
 
+---
 
+## Cloud Deployment on AWS EC2
+
+The complete observability and telemetry stack is deployed on an Ubuntu-based Amazon EC2 instance using Docker Compose.
+
+### Cloud Deployment Features
+
+- Remote cloud-hosted FastAPI backend
+- Publicly accessible telemetry dashboard
+- PostgreSQL database persistence on EC2
+- Grafana and Prometheus observability stack
+- Dockerized multi-container deployment
+- Linux-based cloud server administration
+- AWS security group configuration and networking
+
+### EC2 Deployment Flow
+
+```text
+Laptop MQTT Publisher
+        ↓
+AWS IoT Core
+        ↓
+FastAPI Backend on EC2
+        ↓
+PostgreSQL Database
+        ↓
+Grafana & Prometheus
+```
+
+
+---
 
 ## Monitoring Stack
 

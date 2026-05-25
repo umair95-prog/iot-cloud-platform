@@ -72,10 +72,13 @@ while True:
 
     if ENABLE_LOCAL_API:
         response = requests.post(
-            "http://127.0.0.1:8000/sensor-data",
+ #          "http://127.0.0.1:8000/sensor-data",
+            "http://16.171.166.0:8000/sensor-data",
             json={"temperature": data["temperature"]}
         )
 
-        print("Sent to FastAPI:", response.status_code, response.json())
+#       print("Sent to FastAPI:", response.status_code, response.json())
+        print("Sent to FastAPI:", response.status_code)
+        print("Response text:", response.text)
 
     time.sleep(3)
