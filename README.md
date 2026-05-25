@@ -518,12 +518,16 @@ The platform currently includes:
 - Dockerized multi-service deployment workflows
 - Docker Compose orchestration
 - Kubernetes-based local deployment workflows
+- GitHub Actions CI workflow automation
+- Amazon EC2 cloud deployment on Ubuntu Linux
+- Linux-based cloud server administration and networking workflows
 - Git-based version control and feature branch development workflow
 
 Planned future extensions include:
 
-- CI/CD pipelines using GitHub Actions
-- Public cloud deployment workflows
 - Infrastructure as Code using Terraform
+- Reverse proxy and HTTPS deployment workflows
 - Advanced Kubernetes orchestration and scaling
+- Automated cloud deployment pipelines
 - Extended observability and alerting workflows
+- Secure cloud networking and infrastructure hardening
