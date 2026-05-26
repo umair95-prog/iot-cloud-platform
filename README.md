@@ -1,26 +1,28 @@
 # IoT Cloud Platform
 
-A cloud-native IoT telemetry, monitoring, and observability platform built using AWS IoT Core, FastAPI, PostgreSQL, Docker, Prometheus, Grafana, and AWS EC2.
+A cloud-native IoT telemetry, monitoring, and observability platform built using AWS IoT Core, FastAPI, PostgreSQL, Docker, Prometheus, Grafana, Terraform, and Amazon EC2.
 
-The platform simulates IoT sensor telemetry, processes data through MQTT and REST-based cloud services, stores telemetry persistently in PostgreSQL, and provides real-time monitoring and observability dashboards through Grafana and Prometheus.
+The platform simulates IoT sensor telemetry, processes data through MQTT and REST-based cloud services, stores telemetry persistently in PostgreSQL, and provides real-time monitoring and observability dashboards through Prometheus and Grafana.
 
-The complete stack is containerized using Docker Compose and deployed on a cloud-hosted Linux server running on Amazon EC2.
+The application stack is containerized using Docker Compose and deployed on cloud-hosted Linux infrastructure provisioned through Terraform and hosted on Amazon EC2.
 
 ---
 
 ## Project Overview
 
-The system simulates telemetry data from an IoT device and publishes it through MQTT to AWS IoT Core. Telemetry data is forwarded to a FastAPI backend through REST APIs, where it is processed, exposed through monitoring endpoints, and stored persistently in PostgreSQL.
+The system simulates telemetry data from an IoT device and publishes it through MQTT to AWS IoT Core. Telemetry data is processed through AWS cloud services and forwarded to a FastAPI backend through REST APIs, where it is exposed through monitoring endpoints and stored persistently in PostgreSQL.
 
 The platform includes:
 
 - Real-time telemetry ingestion using MQTT
-- Cloud-hosted backend services on AWS EC2
+- AWS IoT Core, AWS Lambda, and Amazon S3 integration workflows
+- Cloud-hosted backend services on Amazon EC2
+- Infrastructure provisioning using Terraform
 - Persistent telemetry storage using PostgreSQL
 - Observability and monitoring using Prometheus and Grafana
 - Containerized multi-service deployment using Docker Compose
+- Kubernetes-based local deployment workflows
 - CI workflow automation using GitHub Actions
-
 ---
 
 
