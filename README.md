@@ -40,40 +40,54 @@ flowchart LR
         D[Amazon S3<br>iot-data/]
     end
 
-    subgraph Cloud Deployment on AWS EC2
-        E[FastAPI REST Backend]
-        F[PostgreSQL Database]
-        G[Live Web Dashboard]
-        H[Prometheus]
-        I[Grafana Dashboard]
+    subgraph Cloud Infrastructure
+        E[Terraform IaC]
+        F[Amazon EC2]
+        G[Security Groups]
+    end
+
+    subgraph Cloud Application Stack
+        H[FastAPI REST Backend]
+        I[PostgreSQL Database]
+        J[Prometheus]
+        K[Grafana Dashboard]
+        L[Live Web Dashboard]
     end
 
     subgraph Container & Orchestration
-        J[Docker Compose]
-        K[Kubernetes Deployment]
-        L[Kubernetes Service<br>NodePort 30080]
+        M[Docker Compose]
+        N[Kubernetes Deployment]
+        O[Kubernetes Service<br>NodePort 30080]
     end
 
     A -->|MQTT Telemetry| B
     B -->|IoT Rule| C
     C -->|Store JSON| D
 
-    A -->|HTTP POST /sensor-data| E
+    E -->|Provision Infrastructure| F
+    E -->|Configure Networking| G
 
-    E -->|Store telemetry| F
-    E -->|Expose latest data| G
-    E -->|Expose telemetry history| G
+    A -->|HTTP POST /sensor-data| H
 
-    E -->|/metrics endpoint| H
-    H -->|Visualization & Monitoring| I
+    F --> H
+    F --> I
+    F --> J
+    F --> K
 
-    J --> E
-    J --> F
-    J --> H
-    J --> I
+    H -->|Store telemetry| I
+    H -->|Expose latest data| L
+    H -->|Expose telemetry history| L
 
-    K --> E
-    L --> K
+    H -->|/metrics endpoint| J
+    J -->|Visualization & Monitoring| K
+
+    M --> H
+    M --> I
+    M --> J
+    M --> K
+
+    N --> H
+    O --> N
 ```
 
 ## AWS-Native Serverless Pipeline
@@ -143,9 +157,11 @@ MQTT Publisher → AWS IoT Core + Local FastAPI Dashboard
 - AWS Lambda
 - Amazon S3
 - Amazon EC2
+- Terraform
 - Docker
 - Docker Compose
 - Kubernetes
+
 
 ### Backend & APIs
 - Python
@@ -522,10 +538,10 @@ The platform currently includes:
 - Amazon EC2 cloud deployment on Ubuntu Linux
 - Linux-based cloud server administration and networking workflows
 - Git-based version control and feature branch development workflow
+- Infrastructure as Code workflows using Terraform for AWS EC2 provisioning and cloud networking configuration
 
 Planned future extensions include:
 
-- Infrastructure as Code using Terraform
 - Reverse proxy and HTTPS deployment workflows
 - Advanced Kubernetes orchestration and scaling
 - Automated cloud deployment pipelines
