@@ -5,6 +5,7 @@ from fastapi.responses import HTMLResponse
 from prometheus_client import Gauge, generate_latest, CONTENT_TYPE_LATEST
 from fastapi.responses import Response
 import psycopg2
+import requests
 
 app = FastAPI()
 
@@ -58,10 +59,16 @@ def receive_sensor_data(data: SensorData):
         "data": latest_data
     }
 
+
+
+
 # GET endpoint
 @app.get("/sensor-data")
 def get_sensor_data():
     return latest_data
+
+
+
 
 @app.get("/sensor-history")
 def get_sensor_history():
@@ -93,9 +100,96 @@ def get_sensor_history():
 
     return history
 
+
+
 @app.get("/metrics")
 def metrics():
     return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
+
+
+
+
+@app.get("/ai-analysis")
+def ai_analysis():
+    conn = psycopg2.connect(**DB_CONFIG)
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        SELECT temperature, timestamp
+        FROM sensor_data
+        ORDER BY timestamp DESC
+        LIMIT 10
+        """
+    )
+
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    if not rows:
+        return {
+            "message": "No telemetry data available for AI analysis yet."
+        }
+
+    temperatures = [row[0] for row in rows]
+    timestamps = [row[1].isoformat() for row in rows]
+
+    avg_temp = round(sum(temperatures) / len(temperatures), 2)
+    min_temp = min(temperatures)
+    max_temp = max(temperatures)
+
+    anomaly_detected = max_temp > 35 or min_temp < 5
+
+    telemetry_summary = {
+        "records_analyzed": len(rows),
+        "average_temperature": avg_temp,
+        "minimum_temperature": min_temp,
+        "maximum_temperature": max_temp,
+        "anomaly_detected": anomaly_detected,
+        "latest_timestamp": timestamps[0]
+    }
+
+    prompt = f"""
+You are an AI observability assistant for an IoT telemetry platform.
+
+Analyze the following temperature telemetry summary:
+
+Records analyzed: {len(rows)}
+Average temperature: {avg_temp} °C
+Minimum temperature: {min_temp} °C
+Maximum temperature: {max_temp} °C
+Anomaly detected: {anomaly_detected}
+Latest timestamp: {timestamps[0]}
+
+Write a short operational analysis in simple language.
+Mention whether the system looks normal or requires attention.
+"""
+
+    try:
+        response = requests.post(
+            "http://ollama:11434/api/generate",
+            json={
+                "model": "llama3.2:1b",
+                "prompt": prompt,
+                "stream": False
+            },
+            timeout=120
+        )
+
+        response.raise_for_status()
+        ai_response = response.json().get("response", "No AI response generated.")
+
+    except Exception as e:
+        ai_response = f"AI analysis service unavailable: {str(e)}"
+
+    return {
+        "telemetry_summary": telemetry_summary,
+        "ai_analysis": ai_response
+    }
+
+
+
 
 @app.get("/", response_class=HTMLResponse)
 def dashboard():
@@ -127,6 +221,17 @@ def dashboard():
         </tbody>
     </table>
 
+    <h2>AI Telemetry Analysis</h2>
+
+    <button onclick="fetchAIAnalysis()">
+    Run AI Analysis
+    </button>
+
+    <pre id="ai-analysis">
+    No analysis requested yet.
+    </pre>
+    
+
     <script>
         async function fetchData() {
             const response = await fetch('/sensor-data');
@@ -156,6 +261,14 @@ def dashboard():
 
                 tableBody.appendChild(tr);
             });
+        }
+
+        async function fetchAIAnalysis() {
+            const response = await fetch('/ai-analysis');
+            const data = await response.json();
+
+            document.getElementById('ai-analysis').innerText =
+                data.ai_analysis || data.message || 'No analysis available.';
         }
 
         async function updateDashboard() {

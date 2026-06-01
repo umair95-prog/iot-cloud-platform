@@ -4,6 +4,9 @@ services:
     container_name: iot-fastapi-app
     ports:
       - "8000:8000"
+    depends_on:
+      - postgres
+      - ollama
 
   prometheus:
     image: prom/prometheus
@@ -21,7 +24,6 @@ services:
     volumes:
       - grafana-storage:/var/lib/grafana
 
-
   postgres:
     image: postgres:16
     container_name: iot-postgres
@@ -34,6 +36,15 @@ services:
     volumes:
       - postgres-storage:/var/lib/postgresql/data
 
+  ollama:
+    image: ollama/ollama
+    container_name: iot-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-storage:/root/.ollama
+
 volumes:
   grafana-storage:
   postgres-storage:
+  ollama-storage:
