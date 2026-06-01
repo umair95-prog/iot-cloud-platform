@@ -1,10 +1,10 @@
-# IoT Cloud Platform
+# Cloud-Native IoT Telemetry, Monitoring & AI Observability Platform
 
-A cloud-native IoT telemetry, monitoring, and observability platform built using AWS IoT Core, FastAPI, PostgreSQL, Docker, Prometheus, Grafana, Terraform, and Amazon EC2.
+A cloud-native IoT telemetry, monitoring, observability, and AI-assisted analytics platform built using AWS IoT Core, FastAPI, PostgreSQL, Docker, Prometheus, Grafana, Terraform, and Ollama.
 
-The platform simulates IoT sensor telemetry, processes data through MQTT and REST-based cloud services, stores telemetry persistently in PostgreSQL, and provides real-time monitoring and observability dashboards through Prometheus and Grafana.
+The platform simulates IoT sensor telemetry, processes data through MQTT and REST-based cloud services, stores telemetry persistently in PostgreSQL, provides real-time monitoring dashboards through Grafana and Prometheus, and leverages an AI-powered observability assistant to analyze historical telemetry and generate operational insights.
 
-The application stack is containerized using Docker Compose and deployed on cloud-hosted Linux infrastructure provisioned through Terraform and hosted on Amazon EC2.
+The complete stack is containerized using Docker Compose and deployed on a cloud-hosted Linux environment running on Amazon EC2.
 
 ---
 
@@ -20,6 +20,7 @@ The platform includes:
 - Infrastructure provisioning using Terraform
 - Persistent telemetry storage using PostgreSQL
 - Observability and monitoring using Prometheus and Grafana
+- AI-assisted telemetry analysis using Ollama LLM
 - Containerized multi-service deployment using Docker Compose
 - Kubernetes-based local deployment workflows
 - CI workflow automation using GitHub Actions
@@ -56,6 +57,11 @@ flowchart LR
         L[Live Web Dashboard]
     end
 
+    subgraph AI Observability Layer
+        P[Ollama LLM]
+        Q[AI Telemetry Analysis]
+    end
+
     subgraph Container & Orchestration
         M[Docker Compose]
         N[Kubernetes Deployment]
@@ -83,14 +89,91 @@ flowchart LR
     H -->|/metrics endpoint| J
     J -->|Visualization & Monitoring| K
 
+    I -->|Historical Telemetry| P
+    P -->|Generate Insights| Q
+    Q -->|AI Analysis| L
+
+    H -->|/ai-analysis endpoint| P
+
     M --> H
     M --> I
     M --> J
     M --> K
+    M --> P
 
     N --> H
     O --> N
 ```
+
+
+## AI Observability Assistant
+
+The platform includes an AI-powered observability assistant built using Ollama and FastAPI.
+
+The assistant analyzes historical telemetry data stored in PostgreSQL and generates operational summaries that help identify abnormal behavior, temperature trends, and potential system issues.
+
+### Features
+
+* Automated telemetry analysis
+* Historical data summarization
+* Basic anomaly detection
+* Human-readable operational insights
+* Fully self-hosted using open-source LLMs (Ollama)
+
+### AI Analysis Workflow
+
+```text
+PostgreSQL Telemetry Data
+            ↓
+      FastAPI Backend
+            ↓
+        Ollama LLM
+            ↓
+ AI Operational Summary
+            ↓
+ Dashboard & API Output
+```
+
+### Example Telemetry Summary
+
+```json
+{
+  "records_analyzed": 10,
+  "average_temperature": 25.33,
+  "minimum_temperature": 20.05,
+  "maximum_temperature": 31.49,
+  "anomaly_detected": false
+}
+```
+
+### Example AI Output
+
+> The system appears to be operating normally. Temperature values remain within expected operating ranges and no anomalies were detected in the analyzed telemetry data.
+
+### API Endpoint
+
+```http
+GET /ai-analysis
+```
+
+Example Response:
+
+```json
+{
+  "telemetry_summary": {
+    "records_analyzed": 10,
+    "average_temperature": 25.33,
+    "minimum_temperature": 20.05,
+    "maximum_temperature": 31.49,
+    "anomaly_detected": false
+  },
+  "ai_analysis": "The system appears to be operating normally. Temperature values remain within expected operating ranges and no anomalies were detected."
+}
+```
+
+## AI Analysis Dashboard
+
+![AI Analysis Dashboard](screenshots/ai-analysis-dashboard.png)
 
 ## AWS-Native Serverless Pipeline
 
@@ -159,10 +242,18 @@ MQTT Publisher → AWS IoT Core + Local FastAPI Dashboard
 - AWS Lambda
 - Amazon S3
 - Amazon EC2
-- Terraform
+- FastAPI
+- PostgreSQL
 - Docker
 - Docker Compose
 - Kubernetes
+- Terraform
+- GitHub Actions
+- Prometheus
+- Grafana
+- Ollama
+- Python
+- MQTT
 
 
 ### Backend & APIs
@@ -533,6 +624,9 @@ The platform currently includes:
 - REST API history endpoints for telemetry retrieval
 - Prometheus metrics scraping and observability integration
 - Grafana dashboard visualization
+- AI-assisted telemetry analysis using Ollama LLM
+- AI-powered operational summaries generated from historical telemetry data
+- AI analysis dashboard integration through FastAPI endpoints
 - Dockerized multi-service deployment workflows
 - Docker Compose orchestration
 - Kubernetes-based local deployment workflows
@@ -540,12 +634,16 @@ The platform currently includes:
 - Amazon EC2 cloud deployment on Ubuntu Linux
 - Linux-based cloud server administration and networking workflows
 - Git-based version control and feature branch development workflow
-- Infrastructure as Code workflows using Terraform for AWS EC2 provisioning and cloud networking configuration
+- Infrastructure as Code using Terraform for AWS EC2 provisioning and cloud networking automation
 
-Planned future extensions include:
+## Planned Future Extensions
 
+- AI-driven anomaly detection and alert classification
+- AI-generated operational recommendations and incident summaries
 - Reverse proxy and HTTPS deployment workflows
 - Advanced Kubernetes orchestration and scaling
 - Automated cloud deployment pipelines
 - Extended observability and alerting workflows
 - Secure cloud networking and infrastructure hardening
+- GitOps workflows using Helm and ArgoCD
+- Cloud-native deployment on managed Kubernetes platforms (EKS)
